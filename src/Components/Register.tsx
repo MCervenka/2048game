@@ -1,14 +1,49 @@
 import React from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 
+const CREATE_USER = gql`
+  mutation Registration($data: UserCreateInput) {
+    createUser(data: $data) {
+      name
+    }
+  }
+`;
+interface UserCreateInput {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  password: string;
+}
+interface RegisterForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 interface RegisterProps {
   toggle: () => void;
 }
 
 export default (props: RegisterProps) => {
-  const { register, errors, handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { register, errors, handleSubmit } = useForm<RegisterForm>();
+  const [registerUser, { data }] = useMutation(CREATE_USER);
+  const onSubmit = (submitData: RegisterForm) => {
+    console.log(submitData);
+    try {
+      registerUser({
+        variables: {
+          name: submitData.firstName + ' ' + submitData.lastName,
+          email: submitData.email,
+          isAdmin: false,
+          password: submitData.password,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+
+    props.toggle();
   };
   return (
     <div>

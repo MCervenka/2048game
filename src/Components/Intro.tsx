@@ -3,6 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import { TScore } from '../types';
 import Login from './Login';
 import Register from './Register';
+import Game from './Game';
 
 const HIGH_SCORES = gql`
   query GetHighScores {
@@ -18,6 +19,8 @@ export default () => {
   const { loading, error, data } = useQuery(HIGH_SCORES);
   const [showPopUp, setShowPopUp] = useState(false);
   const [login, setLogin] = useState(true);
+  const [loggedIn, setLoggedIn] = useState<any>(null);
+  const [newGame, setNewGame] = useState(false);
   function togglePopUp() {
     setShowPopUp(!showPopUp);
   }
@@ -32,7 +35,9 @@ export default () => {
   if (error) {
     console.error(error);
   }
-  return (
+  return newGame ? (
+    <Game bestScore={data.allScores[0]?.score || 0} />
+  ) : (
     <div className="container">
       <div className="text-center">
         <h1>2048</h1>
@@ -55,15 +60,26 @@ export default () => {
             </tbody>
           </table>
           <div className="button-container">
-            <button className="button-white" onClick={toggleLogin}>
-              Log in
-            </button>
-            <button className="button-black" onClick={toggleRegister}>
-              Register
-            </button>
+            {!loggedIn && (
+              <>
+                <button className="button-white" onClick={toggleLogin}>
+                  Log in
+                </button>
+                <button className="button-black" onClick={toggleRegister}>
+                  Register
+                </button>
+              </>
+            )}
+            {loggedIn && (
+              <button className="button-white" onClick={() => setNewGame(true)}>
+                New Game
+              </button>
+            )}
           </div>
           <div className="text-center">
-            Log in or register to start a new game
+            {loggedIn
+              ? `Hello ${loggedIn.name}, nice to see you again!`
+              : 'Log in or register to start a new game'}
           </div>
         </pre>
       )}
@@ -72,7 +88,7 @@ export default () => {
           <div className="pop-up-container" onClick={togglePopUp}></div>
           <div className="pop-up">
             {login ? (
-              <Login toggle={togglePopUp} />
+              <Login toggle={togglePopUp} setLoggedInUser={setLoggedIn} />
             ) : (
               <Register toggle={togglePopUp} />
             )}
