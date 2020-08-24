@@ -16,3 +16,65 @@ table {
 .text-right {
   text-align: right;
 }
+button {
+  margin: 5px;
+  padding: 10px 25px;
+  border-radius: 5px;
+}
+
+.button-black {
+  background-color: black;
+  color: white;
+}
+.button-black:hover {
+  color: black;
+  background-color: white;
+}
+.button-white {
+  background-color: white;
+  color: black;
+}
+.button-white:hover {
+  color: white;
+  background-color: black;
+}
+.button-container {
+  margin-top: 15px;
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+}
+.pop-up-container {
+  background-color: grey;
+  position: absolute;
+  opacity: 0.2;
+  z-index: 5000;
+  width: 100vw;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+}
+.pop-up {
+  background-color: #faf8ef;
+  z-index: 5001;
+  color: black;
+  width: 500px;
+  height: 300px;
+  position: absolute;
+  margin: auto;
+  padding: 15px;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 220px;
+}
+.other-inputs {
+  width: 100%;
+  margin-bottom: 10px;
+}
