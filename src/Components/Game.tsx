@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
 
 const NEW_GAME = gql`
@@ -27,6 +27,7 @@ interface GameProps {
 export default (props: GameProps) => {
   const { loading, error, data } = useQuery(NEW_GAME);
   const [processMove, { data: Submitdata }] = useMutation(PROCESS_MOVE);
+  const [gameData, setGameData] = useState(data);
   const onKeyPress = ({ key }: { key: string }) => {
     if (
       key === 'ArrowRight' ||
@@ -39,34 +40,26 @@ export default (props: GameProps) => {
       processMove({
         variables: {
           type: {
-            state: data.newGame.state,
-            score: data.newGame.score,
+            state: gameData.state,
+            score: gameData.score,
             direction: pressedKey,
           },
         },
+      }).then((res) => {
+        setGameData(res.data.processGame);
       });
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyPress);
-    return () => window.removeEventListener('keydown', onKeyPress);
-  });
-  if (error) {
-    console.error(error);
-  }
-  console.log(data);
-  if (loading) {
-    return <p>Loading data...</p>;
-  }
   function renderTiles() {
     let tilesArr: any[] = [];
-    data.newGame.state.forEach((row: any, rowIndex: number) => {
+    gameData?.state.forEach((row: any, rowIndex: number) => {
       row.forEach((cell: number, cellIndex: number) => {
         if (cell > 0) {
           tilesArr.push(
             <div
-              className={`tile tile-${cell} tile-position-${rowIndex}-${cellIndex}`}
+              className={`tile tile-${cell} tile-position-${cellIndex + 1}-${
+                rowIndex + 1
+              }`}
               key={cell + cellIndex + rowIndex}
             >
               <div className="tile-inner">{cell}</div>
@@ -77,14 +70,35 @@ export default (props: GameProps) => {
     });
     return tilesArr;
   }
+  function restart(e: any) {
+    e.preventDefault();
+    setGameData(data.newGame);
+  }
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyPress);
+    return () => window.removeEventListener('keydown', onKeyPress);
+  });
+  useEffect(() => {
+    if (data?.newGame) {
+      setGameData(data.newGame);
+    }
+  }, [loading]);
+  if (error) {
+    console.error(error);
+  }
+  console.log(data);
+  if (loading) {
+    return <p>Loading data...</p>;
+  }
+
   return (
     <>
       <div className="container">
         <div className="heading">
           <h1 className="title">2048</h1>
           <div className="scores-container">
-            <div className="score-container">{data.newGame.score}</div>
-            <div className="best-container">0</div>
+            <div className="score-container">{gameData?.score}</div>
+            <div className="best-container">{props.bestScore}</div>
           </div>
         </div>
 
@@ -92,7 +106,9 @@ export default (props: GameProps) => {
           <p className="game-intro">
             Join the numbers and get to the <strong>2048 tile!</strong>
           </p>
-          <a className="restart-button">New Game</a>
+          <a className="restart-button" onClick={restart}>
+            New Game
+          </a>
         </div>
         <div className="game-container">
           <div className="grid-container">
