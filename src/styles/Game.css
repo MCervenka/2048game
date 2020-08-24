@@ -14,11 +14,11 @@ body {
 
 input {
   display: inline-block;
-  background: #8f7a66;
+  background: #fcfbf9;
   border-radius: 3px;
   padding: 0 20px;
   text-decoration: none;
-  color: #f9f6f2;
+  color: #776e65;
   height: 40px;
   line-height: 42px;
   cursor: pointer;
@@ -26,7 +26,7 @@ input {
   border: none;
   outline: none;
   box-sizing: border-box;
-  font-weight: bold;
+  font-weight: normal;
   margin: 0;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -44,12 +44,21 @@ input[type='text']::-webkit-input-placeholder,
 input[type='email']::-webkit-input-placeholder {
   color: #9d948c;
 }
+input[type='password']::-webkit-input-placeholder {
+  color: #9d948c;
+}
 input[type='text']::-moz-placeholder,
 input[type='email']::-moz-placeholder {
   color: #9d948c;
 }
+input[type='password']::-moz-placeholder {
+  color: #9d948c;
+}
 input[type='text']:-ms-input-placeholder,
 input[type='email']:-ms-input-placeholder {
+  color: #9d948c;
+}
+input[type='password']:-ms-input-placeholder {
   color: #9d948c;
 }
 

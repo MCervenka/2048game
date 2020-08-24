@@ -30,20 +30,21 @@ export default (props: RegisterProps) => {
   const [registerUser, { data }] = useMutation(CREATE_USER);
   const onSubmit = (submitData: RegisterForm) => {
     console.log(submitData);
-    try {
-      registerUser({
-        variables: {
+    registerUser({
+      variables: {
+        data: {
           name: submitData.firstName + ' ' + submitData.lastName,
           email: submitData.email,
           isAdmin: false,
           password: submitData.password,
         },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-
-    props.toggle();
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        props.toggle();
+      })
+      .catch((e) => console.log(e));
   };
   return (
     <div>

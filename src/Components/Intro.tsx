@@ -50,7 +50,7 @@ export default () => {
         <pre>
           <table className="w-100">
             <tbody>
-              {data.allScores.map((score: TScore, index: number) => (
+              {data?.allScores?.map((score: TScore, index: number) => (
                 <tr key={index} className="table-row">
                   <td>{index}</td>
                   <td>{score.player.name}</td>

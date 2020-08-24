@@ -61,7 +61,10 @@ button {
   width: 500px;
   height: 300px;
   position: absolute;
-  margin: auto;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
   padding: 15px;
 }
 .row {
